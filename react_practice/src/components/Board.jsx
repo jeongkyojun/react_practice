@@ -1,54 +1,33 @@
-import React, {useEffect, useState} from "react"
-import Square from "../components/Square"
-
+import React, { useEffect, useState } from "react";
+import Square from "../components/Square";
 
 function Board() {
-  const [squares, setSquares] = useState(
-    Array(9).fill(null)
-  );
+  const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
-  const [status, setStatus] = useState("");
-
-    // const winner = calculateWinner(this.state.squares);
-    // if (winner) {
-    //   setStatus('Winner: ' + winner)
-    // } else {
-    //   setStatus("Next player : " + (xIsNext ? 'X' : 'O'));
-    // }
+  const [status, setStatus] = useState("Next player : X");
 
   useEffect(() => {
-    console.log("컴포넌트가 화면에 나타남");
-    return () => {
-      console.log("컴포넌트가 화면에서 사라짐");
-    };
-  }, []);
-  // useEffect가 시작시 설정이 아닌가?
-  // useEffect(() => {
-  //   const winner = calculateWinner(this.state.squares);
-  //       if (winner) {
-  //         setStatus('Winner: ' + winner)
-  //       } else {
-  //         setStatus("Next player : " + (xIsNext ? 'X' : 'O'),);
-  //       }
-  //   })
+    const winner = calculateWinner(squares);
+    if (winner) {
+      setStatus("Winner: " + winner);
+    } else {
+      setStatus("Next player : " + (xIsNext ? "X" : "O"));
+    }
+    return () => {};
+  }, [xIsNext, squares]);
 
   const handleClick = (i) => {
-    //console.log("before : "+xIsNext);
-    const squaresSlice = squares.slice();
-    if (calculateWinner(squaresSlice) || squares[i]) {
-      //console.log("return");
+    const squareSlice = squares.slice();
+    if (calculateWinner(squareSlice) || squareSlice[i]) {
       return;
     }
-    const tmp = squares;
-    tmp[i] = xIsNext ? 'X' : 'O';
-    setSquares(tmp);
-    setXIsNext(!xIsNext);
-    //console.log("after : "+ xIsNext);
-    //setStatus("Next player : " + (xIsNext ? 'X' : 'O'));
+    squareSlice[i] = xIsNext ? "X" : "O";
+    setSquares(squareSlice);
+    setXIsNext((prev) => !prev); // 이전값을 사용할 경우 함수형으로 할것
+    console.log(xIsNext);
   };
 
-
-  const calculateWinner = (squares)=>{
+  const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -59,27 +38,28 @@ function Board() {
       [0, 4, 8],
       [2, 4, 6],
     ];
-    for (let i = 0; i < lines.length; i++){
+    for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        setStatus('Winner: ' + squares[a]);
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        setStatus("Winner: " + squares[a]);
         return squares[a];
       }
     }
     return null;
-  }
+  };
 
-  const renderSquare = (i)=>{
+  const renderSquare = (i) => {
     return (
-      // 두가지 데이터를 보낸다 
+      // 두가지 데이터를 보낸다
       // 1. squares[i] 의 값
       // 2. handleClick 이라는 onClick 이벤트리스너
-      <Square
-        value={squares[i]}
-        onClick={()=>handleClick(i)}
-      />
-    );  
-  }
+      <Square value={squares[i]} onClick={() => handleClick(i)} />
+    );
+  };
 
   return (
     <div>
@@ -100,7 +80,7 @@ function Board() {
         {renderSquare(8)}
       </div>
     </div>
-  ); 
+  );
 }
 
 // class Board extends React.Component{
@@ -126,7 +106,7 @@ function Board() {
 
 //   renderSquare(i) {
 //     return (
-//       // 두가지 데이터를 보낸다 
+//       // 두가지 데이터를 보낸다
 //       // 1. squares[i] 의 값
 //       // 2. handleClick 이라는 onClick 이벤트리스너
 //       <Square
@@ -134,7 +114,7 @@ function Board() {
 //         onClick={()=>this.handleClick(i)}
 //       />
 //     );
-    
+
 //   }
 //   render() {
 //     let status;
@@ -163,9 +143,8 @@ function Board() {
 //           {this.renderSquare(8)}
 //         </div>
 //       </div>
-//     ); 
+//     );
 //   }
 // }
-
 
 export default Board;
