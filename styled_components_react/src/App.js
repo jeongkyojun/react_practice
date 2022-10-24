@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import "./App.css";
 import Button from "./components/atom/Button";
+import InputLabel from "./components/molecule/inputLabel";
 
 const AppBlock = styled.div`
   width: 512px;
@@ -29,6 +30,9 @@ function App() {
   return (
     <AppBlock>
       <Button>Button</Button>
+      <div>
+        <InputLabel labelname="이름"></InputLabel>
+      </div>
     </AppBlock>
   );
 }
