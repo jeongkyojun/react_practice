@@ -5,9 +5,11 @@ const StyledInput = styled.input``;
 
 const Input = ({ account, setData, name }) => {
   const InputHandler = (e) => {
-    setData({
-      ...account,
-      [e.target.name]: e.target.value,
+    setData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
     });
   };
 

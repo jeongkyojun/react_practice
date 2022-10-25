@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Button from "../atom/Button";
@@ -16,6 +16,8 @@ function Join() {
   const nameArr = ["name", "password", "phone_number", "address", "std_num"];
   const labelArr = ["이름", "비밀번호", "전화번호", "주소", "학번"];
   const inputType = ["text", "password", "text", "text", "text"];
+  const delimeter = "\"\\$?; '\n\b\t/";
+
   const [account, setAccount] = useState({
     name: "",
     password: "",
@@ -23,8 +25,6 @@ function Join() {
     address: "",
     std_num: "",
   });
-
-  const [isInputOk, setInputOk] = useState([true, true, true, true, true]);
 
   const [labelcss, setLabelCss] = useState([
     {
@@ -68,44 +68,58 @@ function Join() {
   };
 
   const isEmpty = (str) => {
-    if (str.length === 0) {
+    return str.length === 0;
+  };
+
+  const isTooLong = (str, length) => {
+    return str.length > length;
+  };
+
+  const check_String = (str, delimeter) => {
+    for (let i = 0; i < str.length; i++) {
+      if (delimeter.includes(str[i])) {
+        return true;
+      }
     }
     return false;
-    return true;
   };
-  const check_password = (str) => {
-    const cssarr = labelcss;
-    console.log(str.length);
-    if (str.length === 0) {
-      console.log("글자가 비어있습니다.");
-      cssarr[1] = { ...cssarr[1], color: "red", text: "글자없음" };
-    } else if (str.length > 20) {
-      console.log("글자가 너무 많습니다.");
-      cssarr[1] = { ...cssarr[1], color: "red", text: "글자가 너무 깁니다!" };
-    } else {
-      console.log("글자 개수를 확인합니다.");
-      for (let i = 0; i < str.length; i++) {
-        if ("\"\\$?; '\n\b\t/".includes(str[i])) {
-          console.log("입력할 수 없는 문자가 들어가있습니다.");
-          cssarr[1] = {
-            ...cssarr[1],
-            color: "red",
-            text: "입력할 수 없는 문자가 들어가 있습니다! ( " + str[i] + " )",
-          };
-          setLabelCss(cssarr);
-          return;
+
+  const check_password = useCallback(
+    (str) => {
+      console.log("check_password");
+      const cssarr = labelcss;
+      let text = "글자가 없습니다";
+      let color = "red";
+      console.log(str);
+      console.log(str.length);
+      if (isEmpty(str)) {
+        console.log("글자가 비어있습니다.");
+      } else if (isTooLong(str, 16)) {
+        console.log("글자가 너무 많습니다.");
+        text = "글자가 너무 깁니다!";
+      } else {
+        console.log("글자 개수를 확인합니다.");
+        if (check_String(str, delimeter)) {
+          text =
+            "입력할 수 없는 문자가 들어가 있습니다! (공백 또는 \"\\$?;' 등의 특수문자)";
+        } else {
+          color = "green";
+          text = "가능한 비밀번호입니다.";
         }
       }
-      console.log("비밀번호 확인결과 문제없습니다.");
-      cssarr[1] = {
-        ...cssarr[1],
-        color: "green",
-        text: "가능한 비밀번호입니다.",
-      };
-    }
-    setLabelCss(cssarr);
-    console.log(labelcss);
-  };
+      cssarr[1] = { ...cssarr[1], text: text, color: color };
+      // setLabelCss(cssarr);
+      setLabelCss((prev) => {
+        return {
+          ...prev[1],
+          text,
+          color,
+        };
+      });
+      console.log(labelcss);
+    },
+    [labelcss],
+  );
 
   // 나가기 버튼
   const exitBtn = () => {
@@ -113,11 +127,13 @@ function Join() {
   };
 
   useEffect(() => {
+    console.log("mount");
     check_password(account.password);
+
     return () => {
       console.log("unmount");
     };
-  }, [account.password]);
+  }, [account.password, check_password]);
 
   return (
     <AppBlock>
