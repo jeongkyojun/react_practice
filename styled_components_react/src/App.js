@@ -1,16 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import "./App.css";
-import Button from "./components/atom/Button";
-import InputLabel from "./components/molecule/inputLabel";
-
-const AppBlock = styled.div`
-  width: 512px;
-  margin: 0 auto;
-  margin-top: 4rem;
-  border: 1px solid black;
-  padding: 1rem;
-`;
+import Join from "../src/components/page/Join";
 
 const Circle = styled.div`
   width: 5rem;
@@ -27,14 +18,7 @@ const Circle = styled.div`
 
 function App() {
   //return <Circle color="blue" huge />;
-  return (
-    <AppBlock>
-      <Button>Button</Button>
-      <div>
-        <InputLabel labelname="이름"></InputLabel>
-      </div>
-    </AppBlock>
-  );
+  return <Join />;
 }
 
 export default App;

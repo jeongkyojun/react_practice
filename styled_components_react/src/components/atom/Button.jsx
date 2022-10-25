@@ -10,6 +10,8 @@ const StyledButton = styled.button`
   color: white;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
+  padding-top: 8px;
   padding-left: 1rem;
   padding-right: 1rem;
 
@@ -31,8 +33,12 @@ const StyledButton = styled.button`
   }
 `;
 
-function Button({ children, ...rest }) {
-  return <StyledButton {...rest}> {children} </StyledButton>;
+function Button({ onClick, children, ...rest }) {
+  return (
+    <StyledButton onClick={onClick} {...rest}>
+      {children}
+    </StyledButton>
+  );
 }
 
 export default Button;

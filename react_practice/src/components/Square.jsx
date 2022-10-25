@@ -18,6 +18,7 @@ import React from "react";
 // onClick을 표시할때도 arrow function이 아닌 {}을 사용하였다.
 function Square(props) {
   return (
+    // children = props.children
     <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
