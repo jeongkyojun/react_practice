@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledInput = styled.input``;
 
-function Input({ account, setData, name }) {
+const Input = ({ account, setData, name }) => {
   const InputHandler = (e) => {
     setData({
       ...account,
@@ -16,6 +16,6 @@ function Input({ account, setData, name }) {
       <StyledInput value={account[name]} name={name} onChange={InputHandler} />
     </form>
   );
-}
+};
 
 export default Input;

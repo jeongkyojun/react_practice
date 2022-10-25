@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledLabel = styled.label``;
+const StyledLabel = styled.label`
+  font-size: ${(props) => (props.size ? props.size + "px" : "16px" || "16px")};
+  color: ${(props) => props.color};
+`;
 
 function label({ children, ...rest }) {
   return (
