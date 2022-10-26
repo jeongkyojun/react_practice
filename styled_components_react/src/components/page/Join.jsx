@@ -84,21 +84,20 @@ function Join() {
     return false;
   };
 
-  const check_password = useCallback(
-    (str) => {
+  const check_password = useCallback((str) => {
+    let cssarr = labelcss;
       console.log("check_password");
-      const cssarr = labelcss;
       let text = "글자가 없습니다";
       let color = "red";
-      console.log(str);
-      console.log(str.length);
+      //console.log(str);
+      //console.log(str.length);
       if (isEmpty(str)) {
-        console.log("글자가 비어있습니다.");
+        //console.log("글자가 비어있습니다.");
       } else if (isTooLong(str, 16)) {
-        console.log("글자가 너무 많습니다.");
+        //console.log("글자가 너무 많습니다.");
         text = "글자가 너무 깁니다!";
       } else {
-        console.log("글자 개수를 확인합니다.");
+        //console.log("글자 개수를 확인합니다.");
         if (check_String(str, delimeter)) {
           text =
             "입력할 수 없는 문자가 들어가 있습니다! (공백 또는 \"\\$?;' 등의 특수문자)";
@@ -107,31 +106,31 @@ function Join() {
           text = "가능한 비밀번호입니다.";
         }
       }
-      cssarr[1] = { ...cssarr[1], text: text, color: color };
-      // setLabelCss(cssarr);
-      setLabelCss((prev) => {
-        return {
-          ...prev[1],
-          text,
-          color,
-        };
-      });
-      console.log(labelcss);
-    },
-    [labelcss],
-  );
 
+      const item = {
+        ...labelcss[1], color, text
+    }
+    cssarr[1] = item;
+    // setLabelCss((prev) => {
+    //   return {
+    //     ...prev
+    //   }   
+    // });
+    /*
+    최대 업데이트 깊이를 초과했습니다. 
+    이는 구성 요소가 useEffect 내에서 setState를 호출하지만 
+    useEffect에 종속성 배열이 없거나 종속성 중 하나가 렌더링할 때마다 변경될 때 
+    발생할 수 있습니다.
+    */
+    }, [labelcss]);
   // 나가기 버튼
   const exitBtn = () => {
     console.log("나가기");
   };
 
   useEffect(() => {
-    console.log("mount");
     check_password(account.password);
-
     return () => {
-      console.log("unmount");
     };
   }, [account.password, check_password]);
 
@@ -147,6 +146,7 @@ function Join() {
             labelname={labelArr[idx]} // 라벨
             key={name + idx} // 키
             labelcss={labelcss[idx]}
+            textType={inputType[idx]}
           ></InputLabel>
         );
       })}

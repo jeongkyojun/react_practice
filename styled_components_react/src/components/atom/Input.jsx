@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledInput = styled.input``;
 
-const Input = ({ account, setData, name }) => {
+const Input = ({ account, setData, name,textType }) => {
   const InputHandler = (e) => {
     setData((prev) => {
       return {
@@ -15,7 +15,7 @@ const Input = ({ account, setData, name }) => {
 
   return (
     <form>
-      <StyledInput value={account[name]} name={name} onChange={InputHandler} />
+      <StyledInput value={account[name]} name={name} onChange={InputHandler} type={textType}/>
     </form>
   );
 };
