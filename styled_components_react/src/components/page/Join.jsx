@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Button from "../atom/Button";
-import InputLabel from "../molecule/InputLabel";
+import InputLabel from "../molecule/inputLabel";
 
 const AppBlock = styled.div`
   width: 512px;
