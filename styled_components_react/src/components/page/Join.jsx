@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Button from "../atom/Button";
@@ -56,6 +56,7 @@ function Join() {
 
   // 회원가입 버튼
   const clickBtn = () => {
+    console.log(account);
     console.log("초기화");
     // 정보 초기화
     setAccount({
@@ -84,55 +85,68 @@ function Join() {
     return false;
   };
 
-  const check_password = useCallback((str) => {
-    let cssarr = labelcss;
-      console.log("check_password");
-      let text = "글자가 없습니다";
-      let color = "red";
-      //console.log(str);
-      //console.log(str.length);
-      if (isEmpty(str)) {
-        //console.log("글자가 비어있습니다.");
-      } else if (isTooLong(str, 16)) {
-        //console.log("글자가 너무 많습니다.");
-        text = "글자가 너무 깁니다!";
+  const check_password = (str) => {
+    //let cssarr = labelcss.map((item) => item);
+    let text = "글자가 없습니다";
+    let color = "red";
+    if (isEmpty(str)) {
+    } else if (isTooLong(str, 16)) {
+      text = "글자가 너무 깁니다!";
+    } else {
+      if (check_String(str, delimeter)) {
+        text =
+          "입력할 수 없는 문자가 들어가 있습니다! (공백 또는 \"\\$?;' 등의 특수문자)";
       } else {
-        //console.log("글자 개수를 확인합니다.");
-        if (check_String(str, delimeter)) {
-          text =
-            "입력할 수 없는 문자가 들어가 있습니다! (공백 또는 \"\\$?;' 등의 특수문자)";
-        } else {
-          color = "green";
-          text = "가능한 비밀번호입니다.";
-        }
+        color = "green";
+        text = "가능한 비밀번호입니다.";
       }
-
-      const item = {
-        ...labelcss[1], color, text
     }
-    cssarr[1] = item;
-    // setLabelCss((prev) => {
-    //   return {
-    //     ...prev
-    //   }   
-    // });
-    /*
-    최대 업데이트 깊이를 초과했습니다. 
-    이는 구성 요소가 useEffect 내에서 setState를 호출하지만 
-    useEffect에 종속성 배열이 없거나 종속성 중 하나가 렌더링할 때마다 변경될 때 
-    발생할 수 있습니다.
-    */
-    }, [labelcss]);
+
+    const item = {
+      ...labelcss[1],
+      color,
+      text,
+    };
+    //cssarr[1] = item; // 이렇게만 해도 변경이 되어버린다.
+    //setLabelCss(cssarr);
+    setLabelCss((prev) => {
+      return {
+        ...prev,
+        1: { ...item },
+      };
+    });
+    console.log(labelcss);
+  };
+
   // 나가기 버튼
   const exitBtn = () => {
     console.log("나가기");
   };
 
-  useEffect(() => {
-    check_password(account.password);
-    return () => {
-    };
-  }, [account.password, check_password]);
+  // input 함수
+  const inputAccount = (name, value) => {
+    switch (name) {
+      case nameArr[0]:
+        break;
+      case nameArr[1]:
+        check_password(value);
+        break;
+      case nameArr[2]:
+        break;
+      case nameArr[3]:
+        break;
+      case nameArr[4]:
+        break;
+      default:
+        break;
+    }
+    setAccount((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
 
   return (
     <AppBlock>
@@ -141,7 +155,7 @@ function Join() {
           <InputLabel
             idx={idx}
             account={account} // 계정정보
-            setData={setAccount} // 계정 set 함수
+            inputHandler={inputAccount} // 계정 set 함수
             name={name} // 이름
             labelname={labelArr[idx]} // 라벨
             key={name + idx} // 키
